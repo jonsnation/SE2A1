@@ -2,12 +2,13 @@ from App.database import db
 from datetime import datetime, timezone
 
 class Competition(db.Model):
+    __tablename__ = 'competition' 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     date = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
     description = db.Column(db.String(255), nullable=True)
 
-    admin_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  # FK to Admin (inherited from User)
+    admin_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  
 
     results = db.relationship('Result', back_populates='competition', lazy=True)
 

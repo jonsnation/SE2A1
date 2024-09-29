@@ -1,7 +1,7 @@
 from App.models import User
 from App.database import db
 
-#make user an abstract table, make a create admin, and create student
+
 from App.models import Admin, Student
 from App.database import db
 
@@ -15,7 +15,7 @@ def create_user(username, password, user_type='student'):
         new_user = Student(username=username, password=password)  # Create Student instance
     
     db.session.add(new_user)
-    db.session.commit()  # This should work without warnings if defined correctly
+    db.session.commit()  
     return new_user
 
 
@@ -57,7 +57,7 @@ def update_user(id, username=None, role=None):
     if user:
         if username:
             user.username = username
-        if role:  # Ensure that the role can also be updated if necessary
+        if role:  
             user.role = role
         db.session.add(user)
         db.session.commit()
@@ -72,6 +72,6 @@ def get_users_by_role(role):
 
 def get_username_by_id(user_id):
     """ Helper function to get username by user ID. """
-    # Assuming you have a User model to fetch user details
+
     user = User.query.get(user_id)
     return user.username if user else "Unknown User"

@@ -3,7 +3,7 @@ from App.database import db
 
 
 class User(db.Model):
-    __tablename__ = 'user'  # Ensure this matches the ForeignKey in Result
+    __tablename__ = 'user'  
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
@@ -16,11 +16,11 @@ class User(db.Model):
 
     def __init__(self, username, password, user_type=None, id=None):
         if id is not None:
-            self.id = id  # Allow setting the ID if provided
+            self.id = id  
         self.username = username
         self.set_password(password)
         if user_type:
-            self.type = user_type  # Set the user_type if provided
+            self.type = user_type 
 
     def get_json(self):
         return {

@@ -1,19 +1,18 @@
 from App.models import Competition, User
 from App.database import db
 
-# Competition Controllers
+
 def create_competition(name, description=None, date=None, admin_id=None):
-    # Check if a competition with the same name already exists
     existing_competition = Competition.query.filter_by(name=name).first()
     if existing_competition:
-        return None  # Return None to signal competition with the same name exists
+        return None 
 
-    # Verify if admin_id exists and corresponds to an Admin user
+    
     admin = User.query.get(admin_id)
     
-    # Assuming `User` has a polymorphic `type` or `user_type` field
-    if not admin or admin.type != 'admin':  # Adjust 'type' to whatever your discriminator is called
-        return None  # Return None to signal invalid or non-admin user
+    
+    if not admin or admin.type != 'admin':  
+        return None  
 
     new_competition = Competition(
         name=name,
@@ -57,7 +56,7 @@ def update_competition(competition_id, name=None, description=None, date=None):
             competition.description = description
         if date:
             competition.date = date
-        db.session.commit()  # No need to add again, just commit the changes
+        db.session.commit()  
         return competition
     return None
 

@@ -48,6 +48,9 @@ COMPETITION COMMANDS
 Command Group: competition
 Description: Commands related to competition operations.
 
+(A competition must be created to successfully import the results that map to the created competition ID from the csv. In order for a competiton to be stores in the database, it must be created by an admin, it is not created via importing since there are no competition names in the CSV file, only IDs, so once a competition ID in the database maps with a competition id in the  CSV file, the results can be imported.)
+
+
 Create Competition Command: competition create
 Description: Creates a new competition.
 
@@ -86,7 +89,7 @@ Usage:
 flask result add <competition_id> <user_id> <score> <rank> <time_taken> <problems_solved>
 
 Example:
-flask result add 1 2 95 1 3600 5
+flask result add 1 3 95 1 None 5
 
 LIST RESULTS BY COMPETITION
 Command: result list_by_competition
@@ -104,7 +107,7 @@ Usage:
 flask result list_by_user <user_id>
 
 Example:
-flask result list_by_user 2
+flask result list_by_user 3
 
 TEST COMMANDS
 Command Group: test

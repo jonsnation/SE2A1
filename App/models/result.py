@@ -1,10 +1,10 @@
 from App.database import db
 
 class Result(db.Model):
-    __tablename__ = 'result'  # Optionally specify this if needed
+    __tablename__ = 'result'  
     id = db.Column(db.Integer, primary_key=True)
     competition_id = db.Column(db.Integer, db.ForeignKey('competition.id'), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  # Ensure 'user.id' matches the table name
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  
     score = db.Column(db.Float, nullable=False)
     rank = db.Column(db.Integer, nullable=False)
     time_taken = db.Column(db.String(20), nullable=True)
