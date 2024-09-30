@@ -28,6 +28,8 @@ User Commands
 
 user_cli = AppGroup('user', help='User object commands')
 
+# Create user command
+
 @user_cli.command("create", help="Creates a user")
 @click.argument("username", default="rob")
 @click.argument("password", default="robpass")
@@ -37,6 +39,7 @@ def create_user_command(username, password, role):
     print(f'User {username} created as {role} with ID: {user.id}!')  
 
 
+# List all users command
 @user_cli.command("list", help="Lists users in the database")
 @click.argument("format", default="string")
 def list_user_command(format):
@@ -48,7 +51,6 @@ def list_user_command(format):
         for user in users:
             print(f"{user.id:<10} {user.username:<20} {user.type:<10}")  
     else:
-        # Print JSON format
         for user in users:
             print(user)  
 
@@ -62,13 +64,14 @@ Competition Commands
 
 competition_cli = AppGroup('competition', help='Competition object commands')
 
+# Create competition command
 @competition_cli.command('create', help="Creates a new competition")
 @click.argument('name')
 @click.option('--description', default=None)
 @click.option('--date', default=None)
 @click.option('--admin-id', required=True, help='Admin ID creating the competition')
 def create_competition_command(name, description, date, admin_id):
-    # Convert date string to datetime object
+    #converting date string to date time obj
     if date:
         date = datetime.strptime(date, '%Y-%m-%d')  
     competition = create_competition(name=name, description=description, date=date, admin_id=admin_id)
@@ -78,7 +81,7 @@ def create_competition_command(name, description, date, admin_id):
     else:
         print(f"Failed to create competition '{name}'. Either the name is taken, or the admin ID is invalid.")
 
-
+#  List all competitions command
 @competition_cli.command("list", help="Lists all competition names and IDs in a tabular format")
 @click.argument("format", default="string")
 def list_competitions_command(format):
@@ -98,6 +101,7 @@ def list_competitions_command(format):
         print("No competitions found.")
 
 
+#  Update Competition Command
 @competition_cli.command("update", help="Update competition details")
 @click.argument("competition_id")
 @click.argument("name", required=False)
@@ -118,6 +122,7 @@ Result Commands
 
 result_cli = AppGroup('result', help='Result object commands')
 
+# Add result to competition command
 @result_cli.command("add", help="Add a result to a competition")
 @click.argument("competition_id")
 @click.argument("user_id")
@@ -148,21 +153,20 @@ def add_result_command(competition_id, user_id, score, rank, time_taken, problem
     )
     print(f'Result for user {user_id} in competition {competition_id} added!')
 
-
+# List results by competitions command
 @result_cli.command("list_by_competition", help="List all results for a competition")
 @click.argument("competition_id")
 def list_results_by_competition_command(competition_id):
     results = get_results_by_competition(competition_id)
     
     if results:
-        # Header
         print(f"{'ID':<5} {'Competition ID':<15} {'Competition Name':<25} {'User ID':<10} {'Username':<20} {'Score':<10} {'Rank':<5} {'Problems Solved':<15}")  
         print("-" * 110)
         
         for result in results:
             result_data = result.get_json()
             
-            # Fetch the user by user_id
+            #get user by id
             user = User.query.get(result_data['user_id']) 
             username = user.username if user else 'Unknown'  
     
@@ -180,12 +184,11 @@ def list_results_by_user_command(user_id):
     results = get_results_by_user(user_id)
     
     if results:
-        # Print header for tabular form
         print(f"{'Result ID':<10} {'Competition ID':<15} {'Competition Name':<25} {'User ID':<10} {'Score':<10} {'Rank':<5} {'Problems Solved':<15}")
         print("-" * 90) 
         
         for result in results:
-            result_json = result.get_json()  # Get the updated result with names
+            result_json = result.get_json()  #get updated result with names
             print(f"{result_json['id']:<10} {result_json['competition_id']:<15} {result_json['competition_name']:<25} "
                   f"{result_json['user_id']:<10} {result_json['score']:<10} {result_json['rank']:<5} {result_json['problems_solved']:<15}")
     else:
@@ -194,9 +197,8 @@ def list_results_by_user_command(user_id):
 # Import command
 @result_cli.command("import", help="Import results from a CSV file")
 @click.argument("csv_file") 
-@click.argument("admin_id", type=int) #Admin id needed for import
+@click.argument("admin_id", type=int) #an admin id is needed for the import
 def import_results_from_csv_command(csv_file, admin_id):
-    # Check if the admin exists
     admin = User.query.get(admin_id)
     if not admin or admin.type != 'admin':
         print(f"Error: User ID {admin_id} is not an admin.")
