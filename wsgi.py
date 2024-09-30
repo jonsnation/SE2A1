@@ -142,7 +142,13 @@ def add_result_command(competition_id, user_id, score, rank, time_taken, problem
         print(f'Error: Admin users cannot have results added.')
         return
 
-    # Add result if user is not admin
+    # Check if competition exists
+    competition = Competition.query.get(competition_id)
+    if competition is None:
+        print(f'Error: Competition with ID {competition_id} does not exist.')
+        return
+
+    # Add result if user is not admin and competition exists
     result = add_result(
         competition_id=competition_id,
         user_id=user_id,
@@ -152,6 +158,7 @@ def add_result_command(competition_id, user_id, score, rank, time_taken, problem
         problems_solved=problems_solved
     )
     print(f'Result for user {user_id} in competition {competition_id} added!')
+
 
 # List results by competitions command
 @result_cli.command("list_by_competition", help="List all results for a competition")

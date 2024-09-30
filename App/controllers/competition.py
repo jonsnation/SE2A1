@@ -1,6 +1,6 @@
 from App.models import Competition, User
 from App.database import db
-
+from datetime import datetime
 
 def create_competition(name, description=None, date=None, admin_id=None):
     existing_competition = Competition.query.filter_by(name=name).first()
@@ -44,21 +44,24 @@ def get_all_competitions_json():
     competitions = get_all_competitions()
     return [competition.get_json() for competition in competitions]
 
+
+
 def update_competition(competition_id, name=None, description=None, date=None):
-    """
-    Update competition details (name, description, date).
-    """
-    competition = get_competition_by_id(competition_id)
-    if competition:
-        if name:
-            competition.name = name
-        if description:
-            competition.description = description
-        if date:
-            competition.date = date
-        db.session.commit()  
-        return competition
-    return None
+    competition = Competition.query.get(competition_id)
+    if not competition:
+        return None
+
+    if name:
+        competition.name = name
+    if description:
+        competition.description = description
+    if date:
+        
+        competition.date = datetime.strptime(date, '%Y-%m-%d')  
+
+    db.session.commit()
+    return competition
+
 
 def delete_competition(competition_id):
     """
