@@ -17,6 +17,7 @@ app = create_app()
 migrate = get_migrate(app)
 
 # Initialize database command
+#this is a comment
 @app.cli.command("init", help="Creates and initializes the database")
 def init():
     initialize()
