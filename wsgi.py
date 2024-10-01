@@ -71,7 +71,7 @@ competition_cli = AppGroup('competition', help='Competition object commands')
 @click.option('--date', default=None)
 @click.option('--admin-id', required=True, help='Admin ID creating the competition')
 def create_competition_command(name, description, date, admin_id):
-    #converting date string to date time obj
+    #converting date string to date time object
     if date:
         date = datetime.strptime(date, '%Y-%m-%d')  
     competition = create_competition(name=name, description=description, date=date, admin_id=admin_id)
